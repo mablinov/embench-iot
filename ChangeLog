@@ -1,3 +1,13 @@
+2019-06-10  Jeremy Bennett  <jeremy.bennett@embecosm.com>
+
+	Support for ARM target.
+
+	* config/arm/boards/generic/boardsupport.c: Created.
+	* config/arm/boards/generic/boardsupport.h: Created.
+	* config/arm/chips/size-test-gcc/chip.cfg: Created.
+	* config/arm/chips/size-test-gcc/chipsupport.c: Created.
+	* config/arm/chips/size-test-gcc/chipsupport.h: Created.
+
 2019-06-08  Jeremy Bennett  <jeremy.bennett@embecosm.com>
 
 	Fix LTO problems in the build system.
