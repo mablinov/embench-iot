@@ -10,4 +10,4 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-EXTRA_DIST = none.exp generic.exp ri5cyverilator.exp
+EXTRA_DIST = none.exp generic.exp ri5cyverilator.exp picorv32verilator.exp
