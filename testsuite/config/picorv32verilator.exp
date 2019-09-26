@@ -23,16 +23,13 @@ proc beebs_load { file } {
     # enough time for this to happen.
     #
     # We set all required breakpoints here then begin execution.
-    spawn $GDB -ex "set style enabled off" -ex "set height 0" \
-      -ex "file $file" \
-      -ex "target remote | $GDB_SERVER -c picorv32 --stdin" \
-      -ex "stepi" \
-      -ex "stepi" \
-      -ex "load" \
-      -ex "break start_trigger" \
-      -ex "break stop_trigger" \
-      -ex "break _exit" \
-      -ex "jump *_start"
+    spawn $GDB -ex "set style enabled off" -ex "set pagination off" \
+	-ex "file $file" \
+	-ex "target remote | $GDB_SERVER -c picorv32 --stdin" \
+	-ex "load" \
+	-ex "break start_trigger" \
+	-ex "break stop_trigger" \
+	-ex "cont"
 
     # Wait until we hit start_trigger
     expect {
