@@ -12,17 +12,17 @@
 void
 initialise_board ()
 {
-  return 0;
+  __asm__ volatile ("li a0, 0" : : : "memory");
 }
 
 void __attribute__ ((noinline)) __attribute__ ((externally_visible))
 start_trigger ()
 {
-  return 0;
+  __asm__ volatile ("li a0, 0" : : : "memory");
 }
 
 void __attribute__ ((noinline)) __attribute__ ((externally_visible))
 stop_trigger ()
 {
-  return 0;
+  __asm__ volatile ("li a0, 0" : : : "memory");
 }
