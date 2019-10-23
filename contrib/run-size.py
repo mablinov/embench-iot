@@ -2,6 +2,28 @@
 
 import os, sys, subprocess, csv;
 
+benchmarks = [
+    "aha-mont64",
+    "crc32",
+    "cubic",
+    "edn",
+    "huffbench",
+    "matmult-int",
+    "minver",
+    "nbody",
+    "nettle-aes",
+    "nettle-sha256",
+    "nsichneu",
+    "picojpeg",
+    "qrduino",
+    "sglib-combined",
+    "slre",
+    "st",
+    "statemate",
+    "ud",
+    "wikisort"
+];
+
 variants = [
     {"name": "base", "march": "rv32imcb", "mabi": "ilp32"},
     {"name": "zbb", "march": "rv32imc_zbb", "mabi": "ilp32"},
@@ -31,8 +53,16 @@ variants = [
 embench_iot = "/home/maxim/dev/riscv-bmi/repo/embench-iot";
 
 def run_all_benchmarks():
+    env = os.environ;
+
+    if "EMBENCH_FILTER" in env:
+        filters = env["EMBENCH_FILTER"].split(",");
+
     for variant in variants:
         vdir = "size-test-gcc-bitmanip-" + variant["name"];
+        if "EMBENCH_FILTER" in env:
+            if variant["name"] not in filters:
+                continue;
 
         try:
             os.mkdir(vdir);
@@ -58,6 +88,15 @@ def collect_result(variant, benchmark):
 
     vdir = "size-test-gcc-bitmanip-" + variant;
 
+    env = os.environ;
+    if "EMBENCH_FILTER" in env:
+        filters = env["EMBENCH_FILTER"].split(",");
+
+    if "EMBENCH_FILTER" in env:
+        if variant not in filters:
+            print("[DEBUG]: " + variant + " not in " + str(filters) + ", skipping...");
+            return 0;
+
     sizeprog = "riscv32-unknown-elf-size";
     awkscript = "BEGIN { lineno = 0 } { if(lineno++ == 1) { print $1 } }";
 
@@ -75,28 +114,6 @@ def collect_result(variant, benchmark):
 
     ret = subprocess.run(cmd, input=ret.stdout, stdout=subprocess.PIPE);
     return int(ret.stdout);
-
-benchmarks = [
-    "aha-mont64",
-    "crc32",
-    "cubic",
-    "edn",
-    "huffbench",
-    "matmult-int",
-    "minver",
-    "nbody",
-    "nettle-aes",
-    "nettle-sha256",
-    "nsichneu",
-    "picojpeg",
-    "qrduino",
-    "sglib-combined",
-    "slre",
-    "st",
-    "statemate",
-    "ud",
-    "wikisort"
-];
 
 def main():
     if len(sys.argv) < 2:
